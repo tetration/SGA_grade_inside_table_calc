@@ -1,10 +1,9 @@
-var numOfRows=0;
+
 function IsProfessorOfClassFinalSumEnabled(currentTablePos,lastRowOfTable){//parameter needs to be number of classes user is taking
   let lastRowOftablelocation=document.querySelector(`body > p:nth-child(1) > table > tbody > tr > td > center > table > tbody > tr:nth-child(4) > td:nth-child(1) > p > table > tbody > tr:nth-child(2) > td > p > span > table:nth-child(${currentTablePos}) > tbody > tr:nth-child(${lastRowOfTable})`);
   let lastRowOftablelocationText=document.querySelector(`body > p:nth-child(1) > table > tbody > tr > td > center > table > tbody > tr:nth-child(4) > td:nth-child(1) > p > table > tbody > tr:nth-child(2) > td > p > span > table:nth-child(${currentTablePos}) > tbody > tr:nth-child(${lastRowOfTable}) > td:nth-child(2)`).innerHTML.replace(/<[^>]*>?/gm, '').replace(/ +(?= )/g,'').replace(/(\r\n|\n|\r)/gm, "");
   let tf=false;
   if(lastRowOftablelocationText.includes("Somatório das Avaliações")){
-    console.log("inclui somatorio");
     let rowWithGrade= document.querySelector(`body > p:nth-child(1) > table > tbody > tr > td > center > table > tbody > tr:nth-child(4) > td:nth-child(1) > p > table > tbody > tr:nth-child(2) > td > p > span > table:nth-child(${currentTablePos}) > tbody > tr:nth-child(${lastRowOfTable}) > td:nth-child(4)`).innerHTML.replace(/<[^>]*>?/gm, '').replace(/ +(?= )/g,'').replace(/(\r\n|\n|\r)/gm, "");
     rowWithGrade= rowWithGrade.replace(/\([^()]*\)/g, '');//strips parenthesis and everything inside it
     rowWithGrade = rowWithGrade.replace('&nbsp;', '');//&nbsp;¨
@@ -43,8 +42,6 @@ function getTotalClassGrade(trNthChildValue, collegeClassName) {
   teste = teste.replace(/[^ 0-9\.]+/g, "");//removes words
   teste = teste.replace(/  +/g, ' ');
   collection = teste.split(' ');
-  numOfRows= collection.length;
-  console.log("This table has: "+ numOfRows);
   var onlyNumbers = teste.replace(/\D/g, '');
   console.log(teste);
   collection = collection.filter(n => n)//removes null, emtpy and undefined from array
