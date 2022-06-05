@@ -1,24 +1,32 @@
-/*
-function IsProfessorOfClassFinalSumEnabled(numOfRows){//parameter needs to be number of classes user is taking
-  pos=lastChild+1;
-  var aTest=document.querySelector(`body > p:nth-child(1) > table > tbody > tr > td > center > table > tbody > tr:nth-child(4) > td:nth-child(1) > p > table > tbody > tr:nth-child(2) > td > p > span > table:nth-child(2) > tbody > tr:nth-child(${pos})`);
-  //'body > p:nth-child(1) > table > tbody > tr > td > center > table > tbody > tr:nth-child(4) > td:nth-child(1) > p > table > tbody > tr:nth-child(2) > td > p > span > table:nth-child(4) > tbody > tr:nth-child(6)'
-  //'body > p:nth-child(1) > table > tbody > tr > td > center > table > tbody > tr:nth-child(4) > td:nth-child(1) > p > table > tbody > tr:nth-child(2) > td > p > span > table:nth-child(2) > tbody > tr:nth-child(7)'
-  //'body > p:nth-child(1) > table > tbody > tr > td > center > table > tbody > tr:nth-child(4) > td:nth-child(1) > p > table > tbody > tr:nth-child(2) > td > p > span > table:nth-child(6) > tbody > tr:nth-child(8) > td:nth-child(3) > pbody > p:nth-child(1) > table > tbody > tr > td > center > table > tbody > tr:nth-child(4) > td:nth-child(1) > p > table > tbody > tr:nth-child(2) > td > p > span > table:nth-child(4) > tbody > tr:nth-child(6) > td:nth-child(4) > p > span'
-  //`body > p:nth-child(1) > table > tbody > tr > td > center > table > tbody > tr:nth-child(4) > td:nth-child(1) > p > table > tbody > tr:nth-child(2) > td > p > span > table:nth-child(2}) > tbody > tr > td:nth-child(4)`;
-  //let rowLocation=`body > p:nth-child(1) > table > tbody > tr > td > center > table > tbody > tr:nth-child(4) > td:nth-child(1) > p > table > tbody > tr:nth-child(2) > td > p > span > table:nth-child(${trNthChildValue}) > tbody > tr > td:nth-child(4)`;
-  //var getProfessorGradeTotalSumRow=document.querySelector(rowLocation+ ' > td:nth-child(4) > p > span').innerText;
-  //'body > p:nth-child(1) > table > tbody > tr > td > center > table > tbody > tr:nth-child(4) > td:nth-child(1) > p > table > tbody > tr:nth-child(2) > td > p > span > table:nth-child(2) > tbody > tr:nth-child(7) > td:nth-child(4) > p > span'
-  //console.log(getProfessorGradeTotalSumRow);
-  var aTest=document.querySelector('body > p:nth-child(1) > table > tbody > tr > td > center > table > tbody > tr:nth-child(4) > td:nth-child(1) > p > table > tbody > tr:nth-child(2) > td > p > span > table:nth-child(2) > tbody > tr:nth-child(7)');
-  console.log(aTest.innerHTML);
-  /*
-  if(isNaN()){
-    console.log("test");
+var numOfRows=0;
+function IsProfessorOfClassFinalSumEnabled(currentTablePos,lastRowOfTable){//parameter needs to be number of classes user is taking
+  let lastRowOftablelocation=document.querySelector(`body > p:nth-child(1) > table > tbody > tr > td > center > table > tbody > tr:nth-child(4) > td:nth-child(1) > p > table > tbody > tr:nth-child(2) > td > p > span > table:nth-child(${currentTablePos}) > tbody > tr:nth-child(${lastRowOfTable})`);
+  let lastRowOftablelocationText=document.querySelector(`body > p:nth-child(1) > table > tbody > tr > td > center > table > tbody > tr:nth-child(4) > td:nth-child(1) > p > table > tbody > tr:nth-child(2) > td > p > span > table:nth-child(${currentTablePos}) > tbody > tr:nth-child(${lastRowOfTable}) > td:nth-child(2)`).innerHTML.replace(/<[^>]*>?/gm, '').replace(/ +(?= )/g,'').replace(/(\r\n|\n|\r)/gm, "");
+  let tf=false;
+  if(lastRowOftablelocationText.includes("Somatório das Avaliações")){
+    console.log("inclui somatorio");
+    let rowWithGrade= document.querySelector(`body > p:nth-child(1) > table > tbody > tr > td > center > table > tbody > tr:nth-child(4) > td:nth-child(1) > p > table > tbody > tr:nth-child(2) > td > p > span > table:nth-child(${currentTablePos}) > tbody > tr:nth-child(${lastRowOfTable}) > td:nth-child(4)`).innerHTML.replace(/<[^>]*>?/gm, '').replace(/ +(?= )/g,'').replace(/(\r\n|\n|\r)/gm, "");
+    rowWithGrade= rowWithGrade.replace(/\([^()]*\)/g, '');//strips parenthesis and everything inside it
+    rowWithGrade = rowWithGrade.replace('&nbsp;', '');//&nbsp;¨
+    rowWithGrade = rowWithGrade.replace(/[^ 0-9\.]+/g, "");//removes words
+    rowWithGrade = rowWithGrade.replace(/  +/g, ' ');
+    let numberInRowWithGrade= Number(rowWithGrade);
+    if(!isNaN(numberInRowWithGrade)){
+      tf=true
+    }
+    console.log(rowWithGrade);
   }
-  
+  return tf;
 }
-*/
+function getTableTotalRows(trNthChildValue){
+  let counter =0;
+  let elementLocation = `body > p:nth-child(1) > table > tbody > tr > td > center > table > tbody > tr:nth-child(4) > td:nth-child(1) > p > table > tbody > tr:nth-child(2) > td > p > span > table:nth-child(${trNthChildValue}) > tbody > tr > td:nth-child(4)`;
+  $(elementLocation).each(function () {
+    counter++;
+  });
+  return counter;
+}
+
 function getTotalClassGrade(trNthChildValue, collegeClassName) {
   var teste = "";
   var collection = '';
@@ -35,14 +43,13 @@ function getTotalClassGrade(trNthChildValue, collegeClassName) {
   teste = teste.replace(/[^ 0-9\.]+/g, "");//removes words
   teste = teste.replace(/  +/g, ' ');
   collection = teste.split(' ');
-  //var numOfRows= collection.length;
-  //console.log(numOfRows);
+  numOfRows= collection.length;
+  console.log("This table has: "+ numOfRows);
   var onlyNumbers = teste.replace(/\D/g, '');
   console.log(teste);
   collection = collection.filter(n => n)//removes null, emtpy and undefined from array
   var numberCollection = turnIntoAnArrayOfNumbers(collection);
-  console.log(`The final sum of grade in ${collegeClassName}  is: ` + SumArray(numberCollection));
-  console.log("-------------------------------------------------------------------------------");
+  return numberCollection;
 }
 
 function GetHowManyClasses() {//Gets how many classes the user is taking
@@ -56,16 +63,28 @@ function printSubjectsAndGrade() {
   var numofClasses = GetHowManyClasses();
   var childCounter = 1;
   var childCounter2 = 2;
+  let collegeClassName='';
+  let gradeCollection;
+  let tf=false;
   for (let i = 0; i < numofClasses; i++) {
     console.log("-------------------------------------------------------------------------------");
     let elementLocation = `body > p:nth-child(1) > table > tbody > tr > td > center > table > tbody > tr:nth-child(4) > td:nth-child(1) > p > table > tbody > tr:nth-child(2) > td > p > span > table:nth-child(${childCounter}) > tbody > tr > td:nth-child(1) > p`;
-    let collegeClassName = document.querySelector(elementLocation).innerText;
+    collegeClassName = document.querySelector(elementLocation).innerText;
+    let tableRowscounter;
     collegeClassName =collegeClassName.replace('\n', '');
     console.log(collegeClassName);
-    getTotalClassGrade(childCounter2, collegeClassName);
+    gradeCollection=getTotalClassGrade(childCounter2, collegeClassName);
+    tableRowscounter= getTableTotalRows(childCounter2);
+    tf=IsProfessorOfClassFinalSumEnabled(childCounter2, tableRowscounter);
+    if(tf){//if ProfessorFinal Grade has value remove it from our array so it wont mess our own calculation
+      gradeCollection.pop();
+    }
+    console.log(`The sum of your grades in ${collegeClassName}  is: ` + SumArray(gradeCollection));
+    console.log("-------------------------------------------------------------------------------");
     childCounter += 2;
     childCounter2 += 2;
   }
+
 }
 function turnIntoAnArrayOfNumbers(arrayOfStrings) {
   var counter = 0;
